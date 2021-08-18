@@ -1,9 +1,9 @@
 export default function getRefs() {
   return {
-    searchForm: document.querySelector('#search-form'),
-    galleryContainer: document.querySelector('.js-gallery'),
-    img: document.querySelector('.gallery__item'),
-    loadMoreBtn: document.querySelector('button[data-action="load-more"]'),
-    scrollElem: document.querySelector('.scroll-elem'),
+    searchForm: document.querySelector('.search-form'),
+    galleryContainer: document.querySelector('.gallery'),
+    imageCard: document.querySelector('.image-item'),
+    loadMoreBtn: document.querySelector('[data-action="load-more"]'),
+    infiniteScroll: document.querySelector('#infifnite-scroll-container'),
   };
 }
