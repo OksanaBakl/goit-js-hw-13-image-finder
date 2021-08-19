@@ -1,7 +1,7 @@
 import imageCardTpl from './templates/imageCard.hbs';
 
 import getRefs from './js/get-refs';
-import PicsApiService from './js/apiService';
+import PicturesApiService from './js/apiService';
 
 import * as basicLightbox from 'basiclightbox';
 import * as PNotify from '@pnotify/core/dist/PNotify';
@@ -14,7 +14,7 @@ defaults.delay = 2000;
 
 const refs = getRefs();
 
-const picsApiService = new PicsApiService();
+const picturesApiService = new PicturesApiService();
 
 refs.searchForm.addEventListener('submit', onSearch);
 // refs.loadMoreBtn.addEventListener('click', onLoadMore);
@@ -22,16 +22,16 @@ refs.searchForm.addEventListener('submit', onSearch);
 function onSearch(evt) {
   evt.preventDefault();
 
-  picsApiService.query = evt.currentTarget.elements.query.value;
+  picturesApiService.query = evt.currentTarget.elements.query.value;
 
-  if (picsApiService.query === '') {
+  if (picturesApiService.query === '') {
     return PNotify.error({
       text: 'Please, enter something to search!',
     });
   }
 
-  picsApiService.resetPage();
-  picsApiService.fetchPictures().then(hits => {
+  picturesApiService.resetPage();
+  picturesApiService.fetchPictures().then(hits => {
     // нотификации
     if (hits.length !== 0) {
       PNotify.success({
@@ -48,16 +48,6 @@ function onSearch(evt) {
   });
 }
 
-// function onLoadMore() {
-//   picsApiService.fetchPictures().then(appendPicturesMarkup);
-
-//   // плавный скролл
-//   // document.querySelector('.smooth-scroll').scrollIntoView({
-//   //   behavior: 'smooth',
-//   //   block: 'end',
-//   // });
-// }
-
 function appendPicturesMarkup(hits) {
   refs.galleryContainer.insertAdjacentHTML('beforeend', imageCardTpl(hits));
 }
@@ -66,11 +56,11 @@ function clearGalleryContainer() {
   refs.galleryContainer.innerHTML = '';
 }
 
-// бесконечная загрузка
+// infinite Scroll
 const onEntry = entries => {
   entries.forEach(entry => {
-    if (entry.isIntersecting && picsApiService.query !== '') {
-      picsApiService.fetchPictures().then(hits => {
+    if (entry.isIntersecting && picturesApiService.query !== '') {
+      picturesApiService.fetchPictures().then(hits => {
         appendPicturesMarkup(hits);
       });
     }
@@ -81,7 +71,7 @@ const observer = new IntersectionObserver(onEntry, {
 });
 observer.observe(refs.infiniteScroll);
 
-// большое изображение при клике
+// largeImage on click
 
 refs.galleryContainer.addEventListener('click', onImgClick);
 
